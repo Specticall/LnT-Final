@@ -10,12 +10,7 @@ import { useEffect, useState } from "react";
 import Inertia from "@inertiajs/react";
 
 // Inertia passes data as props.
-export default function Product({
-  auth,
-  products,
-
-  serverMessage,
-}: PageProps) {
+export default function Product({ auth, products, serverMessage }: PageProps) {
   const productData = products as TLaravelResource<TProduct[]>;
 
   return (

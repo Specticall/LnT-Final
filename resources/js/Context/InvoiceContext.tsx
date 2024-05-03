@@ -1,8 +1,10 @@
 import { TInvoice } from "@/Utils/types";
+import { TProduct } from "@/types";
 import { ReactNode, createContext, useContext } from "react";
 
 type TInvoiceContextValues = {
-  recentInvoice: TInvoice[];
+  recentInvoice: TInvoice;
+  invoiceItems: TProduct[];
 };
 
 const InvoiceContext = createContext<TInvoiceContextValues | null>(null);
@@ -10,12 +12,14 @@ const InvoiceContext = createContext<TInvoiceContextValues | null>(null);
 export function InvoiceProvider({
   children,
   recentInvoice,
+  invoiceItems,
 }: {
   children: ReactNode;
-  recentInvoice: TInvoice[];
+  recentInvoice: TInvoice;
+  invoiceItems: TProduct[];
 }) {
   return (
-    <InvoiceContext.Provider value={{ recentInvoice }}>
+    <InvoiceContext.Provider value={{ recentInvoice, invoiceItems }}>
       {children}
     </InvoiceContext.Provider>
   );

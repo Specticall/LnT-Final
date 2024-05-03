@@ -6,12 +6,17 @@ import { TProduct } from "@/types";
 import { useAuth } from "@/Layouts/AuthenticatedLayout";
 import { useInvoice } from "@/Context/InvoiceContext";
 
-export default function ProductList() {
+export default function InvoiceProductList() {
   const { user } = useAuth();
   const { products, selectProduct, selectedProduct } = useProduct();
+  const { invoiceItems } = useInvoice();
 
   const handleDelete = (productId: string) => () => {
     router.delete(route("product.destroy", productId));
+  };
+
+  const handleAdd = (productId: string) => () => {
+    router.post(route("invoice.store", { product_id: productId }));
   };
 
   const handleSelect: (
@@ -22,10 +27,13 @@ export default function ProductList() {
     selectProduct(product);
   };
   return (
-    <ScrollArea className="min-h-full h-0 flex flex-col relative">
+    <ScrollArea className="min-h-full h-0 flex flex-col relative pt-4">
       <ul className="flex flex-col">
         {products.map((product) => {
-          const isSelected = product.id === selectedProduct?.id;
+          const isSelected =
+            product.id === selectedProduct?.id && user.role === "admin";
+
+          if (invoiceItems.some((item) => item.id === product.id)) return;
 
           return (
             <li
@@ -54,11 +62,19 @@ export default function ProductList() {
               <p className="justify-self-end self-center text-sm">
                 IDR {formatNumber(product.price)}
               </p>
-
-              <i
-                className="bx bx-trash self-center ml-4 text-light hover:text-accent cursor-pointer transition-all duration-200"
-                onClick={handleDelete(product.id)}
-              ></i>
+              {user.role === "admin" ? (
+                <i
+                  className="bx bx-trash self-center ml-4 text-light hover:text-accent cursor-pointer transition-all duration-200"
+                  onClick={handleDelete(product.id)}
+                ></i>
+              ) : (
+                <div
+                  className="self-center bg-slate-200 p-1 rounded-sm ml-4 w-6 aspect-square flex items-center justify-center hover:bg-bg duration-200 transition-all cursor-pointer"
+                  onClick={handleAdd(product.id)}
+                >
+                  <i className="bx bx-plus"></i>
+                </div>
+              )}
             </li>
           );
         })}
