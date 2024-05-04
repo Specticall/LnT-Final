@@ -4,7 +4,7 @@
 Product management application made with Laravel + Inertia.
 
 ## Installation
-
+> Important : Make sure configure the enviroment variables with MySQL (not SQLite)
 
 #1.  Clone this github repository
 ```
@@ -39,7 +39,6 @@ npm run dev
 php artisan serve
 ```
 
-> Important : This project is made with MySQL (not SQLite)
 
 ## Notes
 
