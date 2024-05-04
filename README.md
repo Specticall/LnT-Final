@@ -4,7 +4,7 @@
 Product management application made with Laravel + Inertia.
 
 ## Installation
-> Important : Make sure configure the enviroment variables with MySQL (not SQLite)
+> Important : Make sure to configure the enviroment variables with MySQL (not SQLite)
 
 #1.  Clone this github repository
 ```
@@ -41,6 +41,8 @@ php artisan serve
 
 
 ## Notes
+
+> Seed configuration filed is located in `database/seeders/DatabaseSeeder.php`
 
 1. Admin account credential :
    Email: admin@gmail.com,
