@@ -7,7 +7,6 @@ import { useAuth } from "@/Layouts/AuthenticatedLayout";
 import { useInvoice } from "@/Context/InvoiceContext";
 
 export default function ProductList() {
-  const { user } = useAuth();
   const { products, selectProduct, selectedProduct } = useProduct();
 
   const handleDelete = (productId: string) => () => {

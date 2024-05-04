@@ -5,8 +5,17 @@ import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
 import { error } from "console";
+import TextField from "@/Components/general/TextField";
+import Button from "@/Components/general/Button";
+
+const formValues = {
+  email: "",
+  password: "",
+  remember: false,
+};
+type TFieldValues = typeof formValues;
 
 export default function Login({
   status,
@@ -15,11 +24,8 @@ export default function Login({
   status?: string;
   canResetPassword: boolean;
 }) {
-  const { data, setData, post, processing, errors, reset } = useForm({
-    email: "",
-    password: "",
-    remember: false,
-  });
+  const { data, setData, post, processing, errors, reset } =
+    useForm(formValues);
 
   console.log(errors, "error");
 
@@ -35,72 +41,72 @@ export default function Login({
     post(route("login"));
   };
 
+  const register = <TFieldValue extends keyof TFieldValues>(
+    fields: TFieldValue
+  ) => {
+    const onChange = (value: TFieldValues[TFieldValue] | undefined) => {
+      setData((current) => {
+        return {
+          ...current,
+          // If input is undefined then reset to default value.
+          [fields]: value || formValues[fields],
+        };
+      });
+    };
+
+    return { onChange };
+  };
+
   return (
-    <GuestLayout>
+    <GuestLayout className="h-full">
       <Head title="Log in" />
 
-      {status && (
-        <div className="mb-4 font-medium text-sm text-green-600">{status}</div>
-      )}
-
-      <form onSubmit={submit}>
-        <div>
-          <InputLabel htmlFor="email" value="Email" />
-
-          <TextInput
-            id="email"
-            type="email"
-            name="email"
-            value={data.email}
-            className="mt-1 block w-full"
-            autoComplete="username"
-            isFocused={true}
-            onChange={(e) => setData("email", e.target.value)}
+      <form onSubmit={submit} className="flex flex-col h-full">
+        <div className="h-full flex-1 flex flex-col items-stretch justify-center">
+          <h1 className="text-3xl font-semibold">Login</h1>
+          <p className="text-sm mb-4 text-light mt-2">Login to your account</p>
+          <TextField
+            className="mt-4"
+            label="Email"
+            placeholder="example@email.com"
+            defaultValue={data?.email}
+            {...register("email")}
+            errorMessage={errors?.email}
           />
-
-          <InputError message={errors.email} className="mt-2" />
-        </div>
-
-        <div className="mt-4">
-          <InputLabel htmlFor="password" value="Password" />
-
-          <TextInput
-            id="password"
+          <TextField
             type="password"
-            name="password"
-            value={data.password}
-            className="mt-1 block w-full"
-            autoComplete="current-password"
-            onChange={(e) => setData("password", e.target.value)}
+            className="mt-4"
+            label="Password"
+            placeholder="*******"
+            defaultValue={data?.password}
+            {...register("password")}
+            errorMessage={errors?.password}
           />
 
-          <InputError message={errors.password} className="mt-2" />
+          <div className="block mt-4">
+            <label className="flex items-center">
+              <Checkbox
+                name="remember"
+                checked={data.remember}
+                onChange={(e) => setData("remember", e.target.checked)}
+              />
+              <span className="ms-2 text-sm text-gray-600">Remember me</span>
+            </label>
+          </div>
         </div>
-
-        <div className="block mt-4">
-          <label className="flex items-center">
-            <Checkbox
-              name="remember"
-              checked={data.remember}
-              onChange={(e) => setData("remember", e.target.checked)}
-            />
-            <span className="ms-2 text-sm text-gray-600">Remember me</span>
-          </label>
-        </div>
-
-        <div className="flex items-center justify-end mt-4">
-          {canResetPassword && (
-            <Link
-              href={route("password.request")}
-              className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        <div className="grid grid-cols-[1fr_2fr] items-center gap-4 pb-12">
+          <Button disabled={processing}>Login</Button>
+          <p className="text-sm text-light">
+            Don't Have an Account?{" "}
+            <span
+              className="underline text-accent hover:opacity-60 duration-200 transition-all cursor-pointer"
+              onClick={() => {
+                router.get("/register");
+              }}
             >
-              Forgot your password?
-            </Link>
-          )}
-
-          <PrimaryButton className="ms-4" disabled={processing}>
-            Log in
-          </PrimaryButton>
+              Register
+            </span>
+          </p>
         </div>
       </form>
     </GuestLayout>

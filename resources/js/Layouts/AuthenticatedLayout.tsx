@@ -32,8 +32,6 @@ export default function Authenticated({
   header?: ReactNode;
   className?: string;
 }>) {
-  useEffect(() => {});
-
   return (
     <AuthContext.Provider value={{ user: user.data }}>
       <div className="bg-gray-100 p-4 flex flex-col min-h-screen">

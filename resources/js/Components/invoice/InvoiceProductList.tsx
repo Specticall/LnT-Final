@@ -69,7 +69,7 @@ export default function InvoiceProductList() {
                 ></i>
               ) : (
                 <div
-                  className="self-center bg-slate-200 p-1 rounded-sm ml-4 w-6 aspect-square flex items-center justify-center hover:bg-bg duration-200 transition-all cursor-pointer"
+                  className="self-center p-1 rounded-sm ml-4 w-6 aspect-square flex items-center justify-center hover:bg-bg duration-200 transition-all cursor-pointer bg-accent text-white"
                   onClick={handleAdd(product.id)}
                 >
                   <i className="bx bx-plus"></i>

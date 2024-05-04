@@ -13,6 +13,8 @@ type TTextFieldProps<
   hint?: string;
   defaultValue?: InputValue;
   onChange?: (value: InputValue | undefined) => void;
+  shouldFormatNumber?: boolean;
+  disabled?: boolean;
 };
 
 export default function TextField<
@@ -27,6 +29,8 @@ export default function TextField<
   errorMessage,
   defaultValue,
   onChange,
+  disabled,
+  shouldFormatNumber = true,
 }: TTextFieldProps<T, V>) {
   const [value, setValue] = useState(() => {
     if (defaultValue) return defaultValue;
@@ -76,13 +80,14 @@ export default function TextField<
         </p>
       )}
       <input
+        disabled={disabled}
         type={type === "number" ? "text" : type}
         className={cn(
           "col-span-2 mt-2 rounded-lg px-5 py-3 border-lighter placeholder:text-lighter focus:border-accent text-sm"
         )}
         onChange={handleChange}
         value={
-          type === "number" && typeof value === "number"
+          type === "number" && typeof value === "number" && shouldFormatNumber
             ? formatNumber(value)
             : value
         }

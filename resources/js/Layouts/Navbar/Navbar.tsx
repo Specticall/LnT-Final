@@ -28,7 +28,7 @@ export default function Navbar({ user }: { user: TLaravelResource<TUser> }) {
               {isAdmin ? "Admin" : "User"}
             </div>
           </h1>
-          <Navigator />
+          <Navigator user={user.data} />
           <ProfileDropdown user={user.data} />
         </div>
       </div>

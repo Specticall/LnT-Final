@@ -29,6 +29,8 @@ class ProductController extends Controller
         if(Auth::user()->role == "user") {
             $user = User::find(Auth::user()->id);
 
+            $allUserInvoices = $user->invoices;
+
             // get the most recent invoice the user created.
             $mostRecentInvoice = $user->invoices()->latest()->first();
 
@@ -52,6 +54,7 @@ class ProductController extends Controller
                 'products' => ProductResource::collection($products),
                 'recentInvoice' => new InvoiceResource($mostRecentInvoice),
                 'invoiceProducts' => ProductResource::collection($allInvoiceProducts),
+                'allUserInvoices' => InvoiceResource::collection($allUserInvoices),
                 "serverMessage" => session("serverMessage"),    
             ]);
         }
@@ -91,7 +94,7 @@ class ProductController extends Controller
         return to_route('product.index')->with("serverMessage", "Product was created");
     }
 
-    /**
+    /**P
      * Display the specified resource.
      */
     public function show(Product $product)

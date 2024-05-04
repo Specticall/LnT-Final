@@ -15,7 +15,8 @@ class Invoice extends Model
         'shipping_address',
         'created_at',
         'postal_code',
-        'category' 
+        'category', 
+        'status',
     ];
     
     // Inoice table belongs to user tables because users are able to create invoices.

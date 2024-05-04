@@ -11,4 +11,5 @@ export type TInvoice = {
   postalCode: string;
   shippingAddress: string;
   userId: number;
+  status: "completed" | "on_progress";
 };

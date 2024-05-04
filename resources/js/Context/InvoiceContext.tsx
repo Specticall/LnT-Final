@@ -1,10 +1,13 @@
 import { TInvoice } from "@/Utils/types";
 import { TProduct } from "@/types";
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext, useEffect } from "react";
+import { usePopup } from "./PopupContext";
 
 type TInvoiceContextValues = {
   recentInvoice: TInvoice;
   invoiceItems: TProduct[];
+  serverMessage?: string;
+  allUserInvoicesData: TInvoice[];
 };
 
 const InvoiceContext = createContext<TInvoiceContextValues | null>(null);
@@ -13,13 +16,26 @@ export function InvoiceProvider({
   children,
   recentInvoice,
   invoiceItems,
+  serverMessage,
+  allUserInvoicesData,
 }: {
   children: ReactNode;
-  recentInvoice: TInvoice;
-  invoiceItems: TProduct[];
+  recentInvoice?: TInvoice;
+  invoiceItems?: TProduct[];
+  serverMessage?: string;
+  allUserInvoicesData?: TInvoice[];
 }) {
+  const { notify } = usePopup();
+
+  useEffect(() => {
+    if (!serverMessage) return;
+    notify(serverMessage);
+  }, [serverMessage]);
+
   return (
-    <InvoiceContext.Provider value={{ recentInvoice, invoiceItems }}>
+    <InvoiceContext.Provider
+      value={{ recentInvoice, invoiceItems, allUserInvoicesData }}
+    >
       {children}
     </InvoiceContext.Provider>
   );

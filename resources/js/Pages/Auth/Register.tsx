@@ -5,15 +5,21 @@ import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
+import Button from "@/Components/general/Button";
+import TextField from "@/Components/general/TextField";
+
+const formValues = {
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+  phone_number: "",
+};
+type TFieldValues = typeof formValues;
 
 export default function Register() {
-  const { data, setData, post, processing, errors, reset } = useForm({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-    phone_number: "",
-  });
+  const { data, setData, post, processing, errors, reset } =
+    useForm(formValues);
 
   useEffect(() => {
     return () => {
@@ -21,12 +27,106 @@ export default function Register() {
     };
   }, []);
 
+  const register = <TFieldValue extends keyof TFieldValues>(
+    fields: TFieldValue
+  ) => {
+    const onChange = (value: TFieldValues[TFieldValue] | undefined) => {
+      setData((current) => {
+        return {
+          ...current,
+          // If input is undefined then reset to default value.
+          [fields]: value || formValues[fields],
+        };
+      });
+    };
+
+    return { onChange };
+  };
+
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
     console.log(data);
 
     post(route("register"));
   };
+  return (
+    <GuestLayout className="h-full pt-24">
+      <Head title="Log in" />
+
+      <form onSubmit={submit} className="flex flex-col h-full">
+        <div className="h-full flex-1 flex flex-col items-stretch justify-center">
+          <h1 className="text-3xl font-semibold">Register</h1>
+          <p className="text-sm mb-4 text-light mt-2">
+            Create your new account
+          </p>
+          <TextField
+            className="mt-8"
+            label="Email*"
+            placeholder="alexia@gmail.com"
+            defaultValue={data?.email}
+            {...register("email")}
+            errorMessage={errors?.email}
+            hint="The following fields must end with @gmail.com"
+          />
+
+          <TextField
+            className="mt-8"
+            label="Name*"
+            placeholder="Alexia"
+            defaultValue={data?.name}
+            {...register("name")}
+            errorMessage={errors?.name}
+            hint="The following fields need to be atleast 3 characters long and can not be longer than 40 characters"
+          />
+          <TextField
+            className="mt-8"
+            label="Phone Number"
+            placeholder="08888888"
+            defaultValue={data?.phone_number}
+            {...register("phone_number")}
+            errorMessage={errors?.phone_number}
+            hint="The following fields need to start with ‘08’. e.g. ‘084242455”"
+          />
+
+          <TextField
+            type="password"
+            className="mt-8"
+            label="Password"
+            placeholder="*******"
+            defaultValue={data?.password}
+            {...register("password")}
+            errorMessage={errors?.password}
+            hint="The following fields need to be atleast 6 characters long and can not be longer than 12 characters"
+          />
+          <TextField
+            type="password"
+            className="mt-8"
+            label="Confirm Password"
+            placeholder="*******"
+            defaultValue={data?.password_confirmation}
+            {...register("password_confirmation")}
+            errorMessage={errors?.password_confirmation}
+          />
+        </div>
+        <div className="grid grid-cols-[1fr_2fr] items-center gap-4 py-12">
+          <Button disabled={processing}>Register</Button>
+          <p className="text-sm text-light">
+            Already Have an Account?{" "}
+            <Link
+              href={route("login")}
+              className="underline text-accent hover:opacity-60 duration-200 transition-all cursor-pointer"
+            >
+              Login
+            </Link>
+          </p>
+        </div>
+      </form>
+    </GuestLayout>
+  );
+}
+//Backup (ini layout breeze yg asli)
+/*
+
 
   return (
     <GuestLayout>
@@ -137,4 +237,4 @@ export default function Register() {
       </form>
     </GuestLayout>
   );
-}
+*/

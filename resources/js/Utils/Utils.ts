@@ -12,3 +12,11 @@ export function formatNumber(input: number) {
 export function isNumber(value: string): boolean {
   return /^\d+(\.\d+)?$/.test(value);
 }
+
+export function formatDate(date: Date) {
+  return date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
